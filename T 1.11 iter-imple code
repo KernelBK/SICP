@@ -1,0 +1,18 @@
+;sicp 习题1.11
+;1.11 给出f(n)定义，当n<3,f(n)=n, 当n>3, f(n)=f(n-1)+f(n-2)+f(n-3).给出一个采用迭代计算f 的过程.
+;------------code------------
+(define fib-iter
+  (lambda (a2 a1 a0 count)
+    (cond
+      ((= count 0) a0)
+      (else (fib-iter (+ a0 a1 a2) a2 a1 (- count 1)))
+      )
+    )
+  )
+;------------code------------
+scheme compiler: https://repl.it/JqxQ/116
+调用演示：  
+(fib-iter 2 1 0 8)
+=> 68
+(fib-iter 2 1 0 9)
+=> 125
