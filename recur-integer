@@ -1,0 +1,11 @@
+;计算a 到 b的整数和
+(define (sumAtoB a b)
+  (cond
+    ((> a b) 0)
+    (else (+ a (sumAtoB (+ 1 a) b))) ;else 不能少
+    )
+  )
+;(sum 1 10)=1 + (sum 2 10)
+;(sum 2 10)=2 + (sum 3 10)
+;       ......
+;(sum 1 10)= 1+2+3+4+5+6+7+8+9+10 + (sum 10 10)
