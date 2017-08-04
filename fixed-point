@@ -1,0 +1,20 @@
+;如何求解函数 f(x) 的不动点 （if exists）
+
+(define tolerance 0.00001)
+(define (fixed-point f guess)
+  (cond
+    ((close-enough? guess (f guess)) guess)
+    (else (fixed-point f (f guess)))
+    )
+  )
+(define (close-enough? x y)
+  (< (abs (- x y)) tolerance)
+  )
+ 
+ 调用演示：
+   (fixed-point cos 1.0)
+=> 0.7390893414033928
+   (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1)
+=> 1.6180371352785146
+第二个求得黄金分割点
+ta 是 (1 + 1/x) 的不动点
