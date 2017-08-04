@@ -1,0 +1,26 @@
+;通过定义函数值乘积过程 product 来看什么是好代码
+
+---------------坏代码---------------
+;函数值的乘积
+(define  (product a b)
+  ;(define (f a) a) ;第二个a不能用()包起来
+  (define (for-pai k)  
+    (cond 
+      ((even? k) (/ (+ k 2) (+ k 1)))
+      (else (/ (+ k 1) (+ k 2)))
+      )
+    ) 
+  ;(define (inc a) (+ 1 a))
+  (cond
+    ((> a b) 1)
+    (else (* (for-pai a) (product ((lambda (a) (+ 1 a)) a) b)))
+    )
+  )
+;(lambda (a) (+ 1 a))
+
+
+(define (generate-pai n)
+  (product 1 n)
+  )
+  
+  
