@@ -1,0 +1,36 @@
+
+;sum（此处是求解定积分）递归转迭代
+------------------sum 的递归抽象-----------------
+(define (sum term a next b)  
+  (if (> a b)  
+      0  
+      (+ (term a)  
+     (sum term (next a) next b)))) 
+------------------递归-----------------
+(define (cube a) (* a a a))
+
+(define (integral a b dx)
+  (define (add-dx x) (+ dx x))
+  (cond
+    ((> a b) 0)
+    (else (+ (cube (+ a (/ dx 2))) (integral (add-dx a) b dx)))
+    )
+  )
+(define (res-intergral a b dx)
+  (* dx (integral-iter a b dx))
+  )
+------------------迭代-----------------
+;recur——>iter
+;按以前的递归转迭代的思路，主要是寻找中间的不变量。
+;这里我们就定义参数result记录每次累加的结果，每次都先完成计算，
+;将计算结果累加到result中后再进行“递归调用”。
+(define (integral-iter a b dx)
+  (define (add-dx x) (+ dx x))
+  (define (iter a result) ;a 是不断传递前进的
+    (cond
+      ((> a b) result) ;b 只起到划定终点的作用
+      (else (iter (add-dx a) (+ result (cube (+ a (/ dx 2))))))
+      )
+    )
+  (iter a 0)
+  )
