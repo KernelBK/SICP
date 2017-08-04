@@ -22,5 +22,32 @@
 (define (generate-pai n)
   (product 1 n)
   )
+这个product 的定义为什么坏？坏在没有把函数值乘积给绝对抽象出来。
+也就是说，很拖泥带水。对于不同的函数 和 next，内部代码要改写。
+
+我们想实现的product，是绝对抽象的，是适用所有函数的。也就是说，函数改变，product 的代码不用变。
+---------------好代码---------------
+;函数值的乘积
+(define  (product term a next b)
+  (cond
+    ((> a b) 1)
+    (else (* (term a) (product term (next a) next b)))
+    )
+  )
+
+(define (for-pai k)  
+    (cond 
+      ((even? k) (/ (+ k 2) (+ k 1)))
+      (else (/ (+ k 1) (+ k 2)))
+      )
+    )
+(define (next-integer a) (+ a 1))
+
+(define (generate-pai n)
+  (* (product for-pai 1 next-integer n) 4.0)
+  )
   
+调用演示:
+   (generate-pai 1000)
+=> 3.143160705532257
   
