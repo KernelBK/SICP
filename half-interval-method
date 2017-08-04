@@ -1,0 +1,25 @@
+
+;折半法求方程在给定区间的解
+;原理——对于f(x), 如果f(a)<0,f(b)>0, 那么在区间(a, b)内存在一个c, 使得 f(c) = 0.
+;下面的程序，如果给的 a b, 使得 f(a) f(b) 同号，则会error.
+(define (search f neg-point pos-point)
+  ;(let ((mid-point (average neg-point pos-point))))
+  (define mid-point (average neg-point pos-point))
+  (cond
+    ((close-enough? neg-point pos-point) mid-point) ;区间足够小，解就近似是 midpoint
+    ((= (f mid-point) 0) mid-point)
+    ((< (f mid-point) 0) (search f mid-point pos-point))
+    (else (search f neg-point mid-point))
+    )
+  )
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001)
+  )
+(define (average x y) (/ (+ x y) 2.0))
+
+;折半查找还是比较简单的，因为下一次的处理（在值的计算上）是不依赖于上一次的结果的
+;只要给出 mid-point，下一次的递归调用就是完全独立的
+
+调用演示：f = x^3 - 2x - 3 在 1 和 2 之间的解 
+  (search (lambda (x) (- (* x x x) (* 2 x) 3)) 1.0 2.0)
+=> 1.89306640625
