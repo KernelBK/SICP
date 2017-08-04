@@ -40,5 +40,20 @@ x——(* x x x)  求的就是立方和
 当然，这两个函数定义完全可以用lambda（匿名函数）来代替
 待续。
 
+定积分求解
+(define (cube a)
+  (* a a a)
+  )
 
+(define (integral a b dx)
+  (define (add-dx x) (+ dx x))
+  (cond
+    ((> a b) 0)
+    (else (+ (cube (+ a (/ dx 2))) (integral (add-dx a) b dx)))
+    )
+  )
+(define (res-intergral a b dx)
+  (* dx (integral a b dx))
+  )
+  
 
