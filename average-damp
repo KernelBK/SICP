@@ -13,10 +13,6 @@
   (< (abs (- x y)) tolerance)
   )
 ;++++++++++++++++++++++
-(define (sqrtx x)
-  (fixed-point (average-damp (lambda (y) (/ x y))) 1.0)
-  )
-
 ;过程作为返回值  定义平均阻尼（一个过程）
 ;输入是一个函数f (任意函数),对f 进行平均阻尼 并返回平均阻尼处理后的函数
 (define (average-damp f)
@@ -24,6 +20,14 @@
   )
 (define (average x y)
   (/ (+ x y) 2))
+
+(define (sqrtx x)
+  (fixed-point (average-damp (lambda (y) (/ x y))) 1.0)
+  )
+
+(define (cube-root x)
+  (fixed-point (average-damp (lambda (y) (/ x (* y y)))) 1.0)
+  )
 
 *****
 *****
