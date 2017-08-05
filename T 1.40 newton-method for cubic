@@ -1,0 +1,20 @@
+;T1.40 逼近三次方程的一个零点
+
+;需要newton-method 的代码：https://github.com/xuefengCrown/SICP/blob/master/Newton%20method
+
+;逼近 x^3 + ax^2 + bx + c 的一个零点
+(define (cube x) (* x x x))
+(define (cubic a b c) ;有参数的过程！！！
+  (lambda (x) (+ (cube x) (* a (square x)) (* b x) c))
+  )
+(define (newton-method-cubic a b c)
+  (newton-method (cubic a b c) 10.0) ;初始 guess 不同，结果可能不同
+  )
+ 
+ 调用：
+   (newton-method-cubic  2 -33 -90)
+=> 6.000000000709018
+
+******
+******
+******
