@@ -27,4 +27,35 @@
 
 *****
 *****
+优点
+模块 功能的原子化（一个过程一个独立的功能，不动点过程，平均阻尼过程，求平方根过程）
+解耦？
+通用性很强
+抽象
 *****
+与原始的求根代码做对比，感受会很鲜明。（有对比才有理解）
+;牛顿法求解二次根式的值
+;可改进：三个函数的参数值传来传去，没有必要，可以借助块结构来避免
+(define sqrtX 
+  (lambda (x guess)
+    (cond
+      ((good-enough? guess (guessImprove x guess)) guess)
+      (else (sqrtX x (guessImprove x guess)))
+      )
+    )
+  )
+; 考察newguess与oldguess之差与oldguess 的比值，可以提高精度
+(define good-enough?
+  (lambda (old new)
+    (< (abs (/ (- new old) old))  0.001)
+  )
+  )
+(define guessImprove
+  (lambda (x guess)
+    (/ (+ guess (/ x guess)) 2)
+    )
+  )
+  
+ *****
+ *****
+ *****
