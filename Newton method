@@ -1,0 +1,58 @@
+
+;完整的构建 牛顿法（求方程的解）的过程
+
+;如何求解函数 f(x) 的不动点 （if exists）
+;+++++++++++++++++++
+(define tolerance 0.00001)
+(define (fixed-point f guess)
+  (cond
+    ((close-enough? guess (f guess)) guess)
+    (else (fixed-point f (f guess)))
+    )
+  )
+(define (close-enough? x y)
+  (< (abs (- x y)) tolerance)
+  )
+;++++++++++++++++++++++
+;过程作为返回值  定义平均阻尼（一个过程）
+;输入是一个函数f (任意函数),对f 进行平均阻尼 并返回平均阻尼处理后的函数
+(define (average-damp f)
+  (lambda (x) (average x (f x)))
+  )
+(define (average x y)
+  (/ (+ x y) 2))
+;++++++++++++++++++++++
+; 结合 平均阻尼 + 求函数不动点的过程 定义平方根和立方根 过程
+(define (sqrtx x)
+  (fixed-point (average-damp (lambda (y) (/ x y))) 1.0)
+  )
+
+(define (cube-root x)
+  (fixed-point (average-damp (lambda (y) (/ x (* y y)))) 1.0)
+  )
+;++++++++++++++++++++++
+
+;定义过程 描述导数概念
+(define dx 0.00001)
+(define (deriv g)
+  (lambda (x) (/ (- (g (+ x dx)) (g x)) dx)) ;过程作为返回值，必须有lambda
+  )
+; (g(x + dx) - g(x))/dx
+
+;有了deriv之后，牛顿法就可以描述为一个求不动点的过程
+; x - g(x)/Dg(x)
+(define (newton-transform g)
+  (lambda (x) (- x (/ (g x) ((deriv g) x)))) ;出错记录，我把x写成X
+  )
+
+;牛顿法——g(x)=0 的根，是 x-g(x)/Dg(x) 的不动点
+(define (newton-method g guess)
+  (fixed-point (newton-transform g) guess)
+  )
+(define (sqrty y)
+  (define (square x) (* x x))
+  (newton-method (lambda (x) (- (square x) y)) 1.0)
+  )
+
+
+
