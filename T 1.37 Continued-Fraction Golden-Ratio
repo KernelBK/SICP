@@ -1,0 +1,33 @@
+; Continued-Fraction Golden-Ratio(连分数 & 黄金分割点)
+;之前介绍了利用函数不动点求 黄金分割点
+https://github.com/xuefengCrown/SICP/blob/master/fixed-point
+
+;下面是连分数计算 golden ratio
+原理：https://en.wikipedia.org/wiki/Golden_ratio
+https://codegolf.stackexchange.com/questions/48589/generate-mathjax-for-the-golden-ratio-continued-fraction
+
+scheme pro
+
+(define (cont-frac n d k last-res)
+  (define (process last-res)
+    (cond
+      ((= k 1) (/ (n k) last-res))
+      (else (+ (d (- k 1)) (/ (n k) last-res)))
+      )
+    )
+  (cond
+    ((= k 1) (process last-res))
+    (else (cont-frac n d (- k 1) (process last-res)))
+    )
+  )
+
+调用：
+  (cont-frac (lambda (i) 1.0) (lambda (i) 1.0) 1000 ((lambda (i) 1.0) 1000))
+=> 0.6180339887498948
+
+*****
+*****
+*****
+
+
+
