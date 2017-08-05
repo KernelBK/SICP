@@ -1,0 +1,30 @@
+
+;过程作为返回值 来定义 平均阻尼 有什么优点
+;如何求解函数 f(x) 的不动点 （if exists）
+;+++++++++++++++++++
+(define tolerance 0.00001)
+(define (fixed-point f guess)
+  (cond
+    ((close-enough? guess (f guess)) guess)
+    (else (fixed-point f (f guess)))
+    )
+  )
+(define (close-enough? x y)
+  (< (abs (- x y)) tolerance)
+  )
+;++++++++++++++++++++++
+(define (sqrtx x)
+  (fixed-point (average-damp (lambda (y) (/ x y))) 1.0)
+  )
+
+;过程作为返回值  定义平均阻尼（一个过程）
+;输入是一个函数f (任意函数),对f 进行平均阻尼 并返回平均阻尼处理后的函数
+(define (average-damp f)
+  (lambda (x) (average x (f x)))
+  )
+(define (average x y)
+  (/ (+ x y) 2))
+
+*****
+*****
+*****
