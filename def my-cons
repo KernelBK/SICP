@@ -1,0 +1,32 @@
+
+; define cons 让我写 我是写不出来的
+;*********************************************
+(define (my-cons x y)
+
+  (define (dispatch m) ;my-cons 返回一个过程,它根据参数m的值进行分派
+    (cond
+      ((= m 1) x)
+      ((= m 2) y)
+      (else (error "Argument not 1 or 2 --- CONS" m))
+      )
+    )
+  dispatch
+  )
+;**********************可以替换为lambda***********************
+(define (my-cons x y)
+  (lambda (m) ;my-cons 返回一个过程,它根据参数m的值进行分派
+    (cond
+      ((= m 1) x)
+      ((= m 2) y)
+      (else (error "Argument not 1 or 2 --- CONS" m))
+      )
+    )
+  ;dispatch
+  )
+;**********************可以替换为lambda***********************
+
+(define (my-car z) (z 1))
+(define (my-cdr z) (z 2))
+
+;(my-car (my-cons 2 3))
+************
