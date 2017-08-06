@@ -1,0 +1,18 @@
+; T 2.21
+(define (square-list items)
+  (cond
+    ((null? items) (quote()))
+    (else (cons (square (car items))
+                (square-list (cdr items))))
+    )
+  )
+(define (square x) (* x x))
+
+; map implement
+(define (my-map pro items)
+  (cond
+    ((null? items) (quote()))
+    (else (cons (pro (car items))
+                (my-map pro (cdr items))))
+    )
+  )
