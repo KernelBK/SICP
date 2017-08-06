@@ -1,0 +1,42 @@
+;定义线段 写一个过程，返回给定线段的中点
+(define (make-segment point-start point-end)
+  (cons point-start point-end)
+  )
+
+(define (start-segment segment)
+  (car segment)
+  )
+
+(define (end-segment segment)
+  (cdr segment)
+  )
+
+(define (make-point x y)
+  (cons x y)
+  )
+
+(define (x-point point)
+  (car point)
+  )
+(define (y-point point)
+  (cdr point)
+  )
+; 以一个线段为参数，返回此线段中点
+(define (midpoint-segment segment)
+  (make-point (/ (+ (x-point (start-segment segment)) 
+                    (x-point (end-segment segment))) 2)
+              (/ (+ (y-point (start-segment segment)) 
+                    (y-point (end-segment segment))) 2))
+  )
+(define (print-point point)
+  (display "(")
+  (display (x-point point))
+  (display ",")
+  (display (y-point point))
+  (display ")")
+  (newline)
+  )
+
+;(print-point (midpoint-segment (make-segment (make-point 0 0) (make-point 10 10))))
+  
+
