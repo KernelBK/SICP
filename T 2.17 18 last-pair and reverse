@@ -1,0 +1,38 @@
+
+;get the n-th element of the items(a list)
+
+(define (list-ref items n)
+  (cond
+    ((= n 0) (car items))
+    (else (list-ref (cdr items) (- n 1)))
+    )
+  )
+; return length of items
+(define (length-list items)
+  (cond
+    ((null? items) 0)
+    (else (+ 1 (length-list (cdr items))))
+    )
+  )
+; T 2.17 get the last ele
+(define (last-pair items)
+  (cond
+    ((null? items) (quote()))
+    (else (cond
+            ((null? (cdr items)) (car items))
+            (else (last-pair (cdr items)))
+            )
+          )
+    )
+  )
+; T 2.18 此处使用迭代实现 但我不知道怎么用递归实现
+(define (reverse-iter items new-items) ;我想迭代实现
+  (cond
+    ((null? items) new-items)
+    (else (reverse-iter (cdr items) (cons (car items) new-items)))
+    )
+  )
+(define (reverse items)
+  (reverse-iter items ())
+  )
+******
