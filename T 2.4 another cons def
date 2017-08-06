@@ -1,0 +1,16 @@
+
+;T 2.4
+(define (d-cons x y)
+  (lambda (m) (m x y));返回一个过程，这个过程接受一个过程m，用这个m操作x y
+  )
+(define (d-car z)
+  (z (lambda (p q) p))
+  )
+
+;(d-car (d-cons 3 5))
+
+(define (d-cdr z)
+  (z (lambda (p q) q))
+  )
+
+;(d-cdr (d-cons 3 5))
