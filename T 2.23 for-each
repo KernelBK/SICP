@@ -1,0 +1,12 @@
+
+; T 2.23
+(define (for-each pro items)
+  (cond
+    ((null? items) (newline))
+    (else
+      (pro (car items))
+      (for-each pro (cdr items)))
+    )
+  )
+
+; (for-each (lambda (x) (newline) (display x)) (list 23 34 54))
