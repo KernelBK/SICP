@@ -1,0 +1,71 @@
+
+; 对于给定的树(list),对于数值是奇数的叶子，求它们的平方和
+; 将序列操作模块化 标准化
+; 1, 生成要处理的序列 enumerate-tree
+; 2, 过滤序列 filter
+; 3, 映射(map square)
+; 4, 累加(accumulate)
+
+; 过滤一个序列，也就是选出其中满足某个给定谓词的元素
+
+(define (filter predicate sequence)
+  (cond
+    ((null? sequence) (quote()))
+    ((predicate (car sequence)) (cons (car sequence)
+                                      (filter predicate (cdr sequence))))
+    (else (filter predicate (cdr sequence)))
+    )
+  )
+
+; (filter odd? x)
+(define x (list 1 3 5 2 9 8 12 4 67 88))
+; 累加器(累加给定序列中的元素)
+(define (accumulate op initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (op (car sequence) (accumulate op initial (cdr sequence))))
+    )
+  )
+
+;(accumulate * 1 (filter odd? x))
+
+; 枚举出要处理的数据序列
+; 1 生成给定区间的整数序列
+(define (enumerate-interval low high)
+  (cond
+    ((> low high) (quote()))
+    (else (cons low (enumerate-interval (+ 1 low) high)))
+    )
+  )
+
+; 枚举出一棵树的所有树叶
+(define (enumerate-tree tree new-items)
+  (cond
+    ((null? tree) new-items)
+    (else (enumerate-tree (cdr tree) (cond
+                                ((pair? (car tree)) (append new-items (enumerate-tree (car tree) ())))
+                                (else (append new-items (cons (car tree) ())))
+                                )))
+    )
+  )
+
+; rebuild sum-odd-squares
+(define (sum-odd-squares tree)
+  (define (square x) (* x x))
+  (accumulate + 
+              0 
+              (map square (filter odd? (enumerate-tree tree ())))
+              )
+  )
+
+调用演示：
+   (sum-odd-squares (list x '(3 6 5)))
+=> 4639
+   (sum-odd-squares '(1 2 3 2 8 (1 3 (5 2))))
+=> 45
+
+*******
+******
+
+
+
