@@ -1,0 +1,27 @@
+
+; T 2.33 填充缺失的表达式，完成将一些基本的表操作看作累积的定义
+; 累积 构成万物
+(define (my-map p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) (quote()) sequence)
+  )
+
+(define (my-append seq-one seq-two)
+  (accumulate cons seq-two seq-one) ;wow 这个厉害了
+  )
+
+(define (length sequence)
+  (accumulate (lambda (x y) (+ 1 y)) 0 sequence)
+  )
+
+#| 需要作为基础的 accumulate 过程|#
+(define (square x) (* x x))
+; 累加器(累加给定序列中的元素)
+(define (accumulate op initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (op (car sequence) (accumulate op initial (cdr sequence))))
+    )
+  )
+
+******
+******
