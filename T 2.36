@@ -1,0 +1,35 @@
+
+; T 2.36
+; 累积 构成万物
+(define (accumulate-n op init seqs)
+  (cond
+    ((null? (car seqs)) (quote()))
+    (else (cons (accumulate op init (map car seqs)) 
+                (accumulate-n op init (map cdr seqs))))
+    )
+  )
+; (accumulate-n + 0 s)
+; ((1 2 3) (4 5 6) (7 8 9) (10 11 12))
+
+#| 需要作为基础的 accumulate 过程|#
+(define (square x) (* x x))
+; 累加器(累加给定序列中的元素)
+(define (accumulate op initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (op (car sequence) (accumulate op initial (cdr sequence))))
+    )
+  )
+
+; (map (lambda (n m) (expt n m)) '(1 2 3 4) '(4 3 2 1))
+#|
+函数map是一个高端函数。所谓高端，是指这个函数可以接受或返回函数。函数map接受两个或多个参数。第一个参数必须是函数，而其它参数则必须是列表。
+函数map会同步遍历所有的列表，并把第一个参数应用到遍历时遇上的每个元素，并把结果放到一个新表里。
+
+— procedure: map procedure list list ...
+Procedure must be a procedure taking as many arguments as there are lists. If more than one list is given, 
+then they must all be the same length. map applies procedure element-wise to the elements of the lists 
+and returns a list of the results, in order from left to right. The dynamic order in which procedure is 
+applied to the elements of the lists is unspecified; use for-each to sequence side effects.
+|#
+
