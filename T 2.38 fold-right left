@@ -1,0 +1,20 @@
+
+; T 2.38
+(define (fold-left op initial sequence)
+  (define (iter result rest)
+    (cond
+      ((null? rest) result)
+      (else (iter (op result (car rest))
+                  (cdr rest)))
+      )
+    )
+  (iter initial sequence)
+  )
+
+(define (fold-right op initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (op (car sequence) (fold-right op initial (cdr sequence))))
+    )
+  )
+;(fold-right / 1 '(1 2 3)) = (1/ (2/ (3/1)))
