@@ -1,0 +1,11 @@
+
+; T 2.54 两个list是否equal
+(define (equal? list1 list2)
+  (cond
+    ((and (not (pair? list1)) (not (pair? list2)) (eq? list1 list2)) #t)
+    ((and (pair? list1) (pair? list2)) 
+          (and (eq? (car list1) (car list2)) (equal? (cdr list1) (cdr list2))))
+    (else #f)
+    )
+  )
+; 未完全测试
