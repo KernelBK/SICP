@@ -1,0 +1,38 @@
+
+; 符号求导程序
+
+(define (deriv exp var)
+  (cond
+    ((number? exp) 0)
+    ((variable? exp) (if (same-variable? exp var) 1 0))
+    ((sum? exp)
+           (make-sum (deriv (addend exp) var) 
+                     (deriv (augend exp) var)))
+    ((product? exp)
+               (make-sum (make-product (multiplier exp) (deriv (multiplicand exp) var)) 
+                         (make-product (multiplicand exp) (deriv (multiplier exp) var))))
+    (else (error "unknown expression type --- " exp))
+    )
+  )
+
+(define (variable? x) (symbol? x))
+(define (same-variable? v1 v2)
+  (and (variable? v1) (variable? v2) (eq? v1 v2))
+  )
+(define (make-sum a1 a2) (list '+ a1 a2))
+(define (make-product m1 m2) (list '* m1 m2))
+(defien (sum? x) (and (pair? x) (eq? (car x) 'x)))
+; 被加数是表示和式的表里的第二个元素
+(define (addend s) (cadr s))
+; 加数是表示和式的表里的第三个元素
+(define (augend s) (caddr s))
+; 乘式就是第一个元素是*的表
+(define (product? x) (and (pair? x) (eq? (car x) '*)))
+; 被乘数是表示乘式的表里的第二个元素
+(define (multiplier p) (cadr p))
+; 乘数是表示乘式的表里的第三个元素
+(define (multiplicand p) (caddr p))
+
+未完成 未测试
+
+
