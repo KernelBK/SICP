@@ -1,0 +1,43 @@
+
+(define (permutations s)
+  (cond
+    ((null? s) (list (quote())))
+    (else (flatmap (lambda (x) 
+                     (map (lambda (p) (cons x p)) 
+                          (permutations (remove x s)))) 
+                        s))
+    )
+  )
+#|
+(permutations '(1 2 3))
+(permutations '(2 3))
+(permutations '(3)) -(3 ())
+
+|#
+
+(define (flatmap proc seq)
+  (accumulate append (quote()) (map proc seq))
+  )
+
+(define (remove item seq)
+  (filter (lambda (x) (not (= x item))) seq)
+  )
+
+(define (filter predicate sequence)
+  (cond
+    ((null? sequence) (quote()))
+    ((predicate (car sequence)) (cons (car sequence)
+                                      (filter predicate (cdr sequence))))
+    (else (filter predicate (cdr sequence)))
+    )
+  )
+
+#| 需要作为基础的 accumulate 过程|#
+(define (square x) (* x x))
+; 累加器(累加给定序列中的元素)
+(define (accumulate op initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (op (car sequence) (accumulate op initial (cdr sequence))))
+    )
+  )
