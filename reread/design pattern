@@ -1,0 +1,81 @@
+
+# 与数据结构有关的一种强有力的设计原理——使用约定的界面
+
+我明白了
+！！！
+所谓使用序列作为界面，意思是说——每一步的处理其输入是序列，输出也是序列。这种约定使得程序更加清晰。
+map——作映射
+filter——作过滤
+reduce（accumulate）——作累加器
+enumerate——枚举
+
+***************************************************
+; 递归真是太好了
+
+; 考虑问题：对于一棵树，计算其所有奇数叶子节点的平方和
+
+; 1 枚举
+; 枚举整数序列 python 中使用range
+(define (enumerate-interval low high)
+  (cond
+    ((> low high) (quote()))
+    (else (cons low (enumerate-interval (+ 1 low) high)))
+    )
+  )
+; test
+( define num (enumerate-interval 2 10))
+
+; 枚举一棵树的所有树叶
+(define (enumerate-tree tree)
+  (cond
+    ((null? tree) (quote()))
+    ((not (pair? tree)) (list tree))
+    (else (append (enumerate-tree (car tree)) 
+                  (enumerate-tree (cdr tree))))
+    )
+  )
+; test
+(define items (list 1 (list 2 3 (list 4 5))))
+(enumerate-tree items)
+
+; 2 filter 过滤器
+; 输入序列 输出序列 使用谓词predicate 过滤
+(define (filter predicate sequence)
+  (cond
+    ((null? sequence) (quote()))
+    ((predicate (car sequence)) (cons (car sequence) 
+                                      (filter predicate (cdr sequence))))
+    (else (filter predicate (cdr sequence)))
+    )  
+  )
+; test filter
+; (filter even? num)
+
+; 3 accumulate 累加器
+; input: 序列
+; return:
+; argus--ope 连接符; initial 初始值; sequence 输入序列
+(define (accumulate ope initial sequence)
+  (cond
+    ((null? sequence) initial)
+    (else (ope (car sequence) (accumulate ope initial (cdr sequence))))
+    )
+  )
+; test accumulate
+(accumulate cons [] num)
+;(accumulate + 0 num)
+
+; 至此 可以实现 sum-odd-squares
+(define (sum-odd-squares tree)
+  (define (square x) (* x x))
+  (accumulate +
+              0
+              (map square 
+                   (filter odd? 
+                           (enumerate-tree tree))))
+  )
+; test sum-odd-squares
+(define tree (list 1 (list 2 4 (list 5 6)) 7 3))
+(sum-odd-squares tree)
+
+***************************************************
