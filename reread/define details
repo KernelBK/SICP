@@ -1,0 +1,6 @@
+
+(define A (* 3 3))
+;A ;; 9
+(define (A) (* 3 3)) ;; A 是一个无参过程
+;(A)
+A ;;=> #<Closure>
