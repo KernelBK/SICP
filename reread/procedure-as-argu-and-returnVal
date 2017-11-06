@@ -1,0 +1,11 @@
+# 函数（过程）作为参数，作为返回值
+
+(define (compose f g)
+  (define (f-g x)
+    (f (g x))
+    )
+  f-g
+  )
+(define (square x) (* x x))
+(define (multi5 x) (* x 5))
+((compose multi5 square) 10)
