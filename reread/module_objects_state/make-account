@@ -1,0 +1,28 @@
+(define new-withdraw
+  (let ((balance 100))
+    (lambda (amount)
+      (if (>= balance amount)
+          (begin (set! balance (- balance amount))
+                 balance)
+          "Insufficient funds"))))
+        
+;; (new-withdraw 28)
+
+;; 提款处理器
+;; balance 初始金额
+;; 返回一个过程
+(define (make-withdraw balance)
+  (lambda (amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds")))
+(define w1 (make-withdraw 100))
+(define w2 (make-withdraw 100))
+
+(w1 19) ;; w1中取出19
+;;(w2 20) ;; w2中取出20
+(w1 1)
+;; W1 and W2 are completely independent objects, 
+;; each with its own local state variable balance. 
+;; Withdrawals from one do not affect the other.
