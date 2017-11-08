@@ -1,0 +1,109 @@
+;; 通用型复数算术系统
+;; 明细这种实现的优点和不足之处
+**********************************************************
+;; 复数运算
+(define (add-complex z1 z2)
+  (make-from-real-imag-rectangular (+ (real-part z1) (real-part z2))
+                       (+ (imag-part z1) (imag-part z2))))
+(define (sub-complex z1 z2)
+  (make-from-real-imag-rectangular (- (real-part z1) (real-part z2))
+                       (- (imag-part z1) (imag-part z2))))
+(define (mul-complex z1 z2)
+  (make-from-mag-ang-polar (* (magnitude z1) (magnitude z2))
+                     (+ (angle z1) (angle z2))))
+(define (div-complex z1 z2)
+  (make-from-mag-ang-polar (/ (magnitude z1) (magnitude z2))
+                     (- (angle z1) (angle z2))))
+
+;; 实部 虚部 (x, y) 表示复数
+(define (real-part-rectangular z) (car z))
+(define (imag-part-rectangular z) (cdr z))
+(define (magnitude z)
+  (define (square x) (* x x))
+  (sqrt (+ (square (real-part z)) (square (imag-part z)))))
+(define (angle-rectangular z)
+  (atan (imag-part-rectangular z) (real-part z)))
+(define (make-from-real-imag-rectangular x y) 
+  (attach-tag 'rectangular (cons x y)))
+(define (make-from-mag-ang-rectangular r a) 
+  (attach-tag 'rectangular (cons (* r (cos a)) (* r (sin a)))))
+
+;; 模 幅角 (r, A) 表示
+(define (real-part-polar z)
+  (* (magnitude z) (cos (angle z))))
+(define (imag-part-polar z)
+  (* (magnitude z) (sin (angle z))))
+(define (magnitude-polar z) (car z))
+(define (angle-polar z) (cdr z))
+(define (make-from-real-imag-polar x y)
+  (define (square x) (* x x))
+  (attach-tag 'polar (cons (sqrt (+ (square x) (square y)))
+        (atan y x))))
+(define (make-from-mag-ang-polar r a) 
+  (attach-tag 'polar (cons r a)))
+
+;; 带标志的数据
+(define (attach-tag type-tag contents)
+  (cons type-tag contents))
+(define (type-tag datum)
+  (if (pair? datum)
+      (car datum)
+      (error "Bad tagged datum -- TYPE-TAG" datum)))
+(define (contents datum)
+  (if (pair? datum)
+      (cdr datum)
+      (error "Bad tagged datum -- CONTENTS" datum)))
+(define (rectangular? z)
+  (eq? (type-tag z) 'rectangular))
+(define (polar? z)
+  (eq? (type-tag z) 'polar))
+
+;; 适用于不同实现的 析取操作
+(define (real-part z)
+  (cond ((rectangular? z) 
+         (real-part-rectangular (contents z)))
+        ((polar? z)
+         (real-part-polar (contents z)))
+        (else (error "Unknown type -- REAL-PART" z))))
+(define (imag-part z)
+  (cond ((rectangular? z)
+         (imag-part-rectangular (contents z)))
+        ((polar? z)
+         (imag-part-polar (contents z)))
+        (else (error "Unknown type -- IMAG-PART" z))))
+(define (magnitude z)
+  (cond ((rectangular? z)
+         (magnitude-rectangular (contents z)))
+        ((polar? z)
+         (magnitude-polar (contents z)))
+        (else (error "Unknown type -- MAGNITUDE" z))))
+(define (angle z)
+  (cond ((rectangular? z)
+         (angle-rectangular (contents z)))
+        ((polar? z)
+         (angle-polar (contents z)))
+        (else (error "Unknown type -- ANGLE" z))))
+
+;; 包装构造器
+(define (make-from-real-imag x y)
+  (make-from-real-imag-rectangular x y))
+(define (make-from-mag-ang r A)
+  (make-from-mag-ang-polar r A))
+
+;; test
+(define c1 (make-from-real-imag 1 2))
+(define c2 (make-from-real-imag 4 5))
+
+(add-complex c1 c2)
+**********************************************************
+
+检查一个数据项的类型，并据此去调用某个适当过程称为基于类型的分派。
+在系统设计中，这是一种获得模块性的强有力策略。
+而在另一方面，像此处（2.4.2节）那样实现的分派有两个显著的弱点。
+第一个弱点是，其中的通用型界面过程（real-part, imag-part, magnitude 和 angle）
+必须知道所有的不同表示。举例来说，假定现在希望能为前面的复数系统增加另一种表示，
+我们就必须将这一新表示方式标识为一种新类型，而且要在每个通用界面过程增加一个子句，检查
+这一新类型，并对这种表示形式使用适当的选择函数。
+
+%%
+%%
