@@ -1,0 +1,33 @@
+;; 支持存取的简单银行账户
+(define (make-account balance)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error "Unknown request -- MAKE-ACCOUNT"
+                       m))))
+  dispatch)
+
+;; test
+(define xuef-acc (make-account 100))
+(define wg-acc (make-account 100))
+((xuef-acc 'deposit) 100)
+
+
+Each call to make-account sets up an environment with a local state variable balance. 
+Within this environment, make-account defines procedures deposit and withdraw that access 
+balance and an additional procedure dispatch that takes a "message" as input and returns 
+one of the two local procedures. The dispatch procedure itself is returned as the value that 
+represents the bank-account object. This is precisely the message-passing style of programming 
+that we saw in section 2.4.3, although here we are using it in conjunction with the ability to 
+modify local variables.
+
+
+
