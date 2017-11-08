@@ -1,0 +1,21 @@
+# 消息传递
+“智能数据对象”，让它们基于操作名完成所需的分派工作。
+如果我们想这样做，所需要做的就是做出一种安排，将每一个数据对象（例如一个
+采用直角坐标表示的复数）表示为一个过程。它以操作的名字作为输入，能够去执行
+指定的操作。
+
+(define (make-from-real-imag x y)
+  (define (dispatch op)
+    (cond ((eq? op 'real-part) x)
+          ((eq? op 'imag-part) y)
+          ((eq? op 'magnitude)
+           (sqrt (+ (square x) (square y))))
+          ((eq? op 'angle) (atan y x))
+          (else
+           (error "Unknown op -- MAKE-FROM-REAL-IMAG" op))))
+  dispatch)
+  
+  
+  
+  
+  
