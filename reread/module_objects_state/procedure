@@ -1,0 +1,23 @@
+# 一个过程是什么？
+
+代码 + 环境
+
+
+unix 进程是什么？
+
+
+对象（object）
+
+不同的对象有不同的状态变量，它们没有联系。
+但是，indeed there are forces that couple us.（耦合）
+存在很多力量将你我耦合起来。
+我对你说话，你的状态改变了；我看着你，我的状态改变了。你对我喊叫，我的血压上升了。
+
+事实上，事物间的耦合度，远大于表面看到的。
+
+Actions and Identity
+we say that an action A, had an effect on an object X.(or equivalently, that X was changed by A)
+if some proporty P which was true of X before A, became false of X after A.
+we say that two objects, X and Y. are the same if any action which has an effect on X
+has the same effect on Y.
+
